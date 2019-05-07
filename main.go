@@ -25,7 +25,7 @@ func (d RedactedDir) Open(name string) (http.File, error) {
 		}
 	}
 	if !matched {
-		return nil, os.ErrNotExist
+		return nil, os.ErrPermission
 	}
 	return d.Dir.Open(name)
 }
