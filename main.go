@@ -8,13 +8,14 @@ import (
 	"os"
 )
 
-type RedactedDir struct {
+type NewFileSystem struct {
 	http.Dir
 	roleMap RoleMap
 }
 
-func (d RedactedDir) Open(name string) (http.File, error) {
+func (d NewFileSystem) Open(name string) (http.File, error) {
 	log.Printf("name: %v", name)
+	// do not display non accessible content
 	role := getRole()
 
 	matched := false
@@ -25,9 +26,18 @@ func (d RedactedDir) Open(name string) (http.File, error) {
 		}
 	}
 	if !matched {
-		return nil, os.ErrPermission
+		log.Printf("Permission denied for : %v", name)
+		return nil, os.ErrNotExist
 	}
-	return d.Dir.Open(name)
+
+	// fetch file
+	file, err := d.Dir.Open(name)
+	if err != nil {
+		return nil, err
+	}
+
+	return file, err
+	// TODO: Stop displaying directories. Or not?
 }
 
 func main() {
@@ -40,10 +50,11 @@ func main() {
 	}
 
 	roleMap, _ := getRoleAndPaths(file)
-	redactedDir := RedactedDir{Dir: http.Dir("./"), roleMap: RoleMap(roleMap)}
+	redactedDir := NewFileSystem{Dir: http.Dir("./"), roleMap: RoleMap(roleMap)}
 	log.Fatal(http.ListenAndServe(":8080", http.FileServer(redactedDir)))
 }
 
 func getRole() Role {
+	// TODO: Add authentication
 	return Role("MINIMAL")
 }

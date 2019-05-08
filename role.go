@@ -32,6 +32,8 @@ func getFile(fileName string) (*os.File, error) {
 	return file, nil
 }
 
+// getRoleAndPaths returns mapping between various roles and the path
+// regexs they support
 func getRoleAndPaths(reader io.Reader) (map[Role][]*regexp.Regexp, error) {
 	// loop while all eof file is ot reached
 	// and keep track of current role
