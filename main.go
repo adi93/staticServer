@@ -44,9 +44,9 @@ func main() {
 	fmt.Println("Hello World!")
 
 	configFile := "./include.conf"
-	file, err := getFile(configFile)
+	file, err := os.Open(fileName)
 	if err != nil {
-		panic("Config error")
+		panic("Could not read file")
 	}
 
 	roleMap, _ := getRoleAndPaths(file)

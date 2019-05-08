@@ -23,15 +23,6 @@ func GetRole() Role {
 	return MINIMAL
 }
 
-func getFile(fileName string) (*os.File, error) {
-	// read file
-	file, err := os.Open(fileName)
-	if err != nil {
-		return file, errors.New("Could not read file")
-	}
-	return file, nil
-}
-
 // getRoleAndPaths returns mapping between various roles and the path
 // regexs they support
 func getRoleAndPaths(reader io.Reader) (map[Role][]*regexp.Regexp, error) {
