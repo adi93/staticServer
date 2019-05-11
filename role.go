@@ -2,10 +2,8 @@ package main
 
 import (
 	"bufio"
-	"errors"
 	"io"
 	"log"
-	"os"
 	"regexp"
 )
 
